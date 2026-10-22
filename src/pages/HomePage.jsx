@@ -65,6 +65,8 @@ const previewAnime = [
 ];
 
 const genres = ["Action", "Adventure", "Comedy", "Drama", "Fantasy", "Romance", "Sci-fi", "Supernatural"];
+const API_BASE_URL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+
 export default function HomePage() {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [readNotificationIds, setReadNotificationIds] = useState(
@@ -98,9 +100,9 @@ export default function HomePage() {
     async function loadAnime() {
       try {
         const [healthResponse, animeResponse, authResponse] = await Promise.all([
-          fetch("/api/health"),
-          fetch("/api/anime"),
-          fetch("/api/auth/user/me", { credentials: "same-origin" }),
+          fetch(`${API_BASE_URL}/api/health`),
+          fetch(`${API_BASE_URL}/api/anime`),
+          fetch(`${API_BASE_URL}/api/auth/user/me`, { credentials: "include" }),
         ]);
 
         if (!healthResponse.ok || !animeResponse.ok || !authResponse.ok) {
@@ -250,9 +252,9 @@ export default function HomePage() {
 
     setAuthPending(true);
     try {
-      const response = await fetch(`/api/auth/user/${authMode}`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/user/${authMode}`, {
         method: "POST",
-        credentials: "same-origin",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: authEmail.trim(), password: authPassword }),
       });
@@ -282,9 +284,9 @@ export default function HomePage() {
     setSignOutPending(true);
     setAccountError("");
     try {
-      const response = await fetch("/api/auth/user/logout", {
+      const response = await fetch(`${API_BASE_URL}/api/auth/user/logout`, {
         method: "POST",
-        credentials: "same-origin",
+        credentials: "include",
       });
       if (!response.ok) {
         throw new Error(await getErrorMessage(response, "Could not sign out."));
