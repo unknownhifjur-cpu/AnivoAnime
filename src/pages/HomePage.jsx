@@ -65,7 +65,10 @@ const previewAnime = [
 ];
 
 const genres = ["Action", "Adventure", "Comedy", "Drama", "Fantasy", "Romance", "Sci-fi", "Supernatural"];
-const API_BASE_URL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+const API_BASE_URL = (
+  import.meta.env.VITE_API_URL
+  || (import.meta.env.DEV ? "" : "https://anivo-server.onrender.com")
+).replace(/\/$/, "");
 
 export default function HomePage() {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
